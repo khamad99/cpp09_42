@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 13:39:27 by kalshaer          #+#    #+#             */
-/*   Updated: 2023/12/29 09:56:01 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/02 10:13:06 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,8 @@ static void	btc_prs_input_line(std::string line,
 		value = std::atof(tmp2.c_str());
 		if (value == 0.0 && tmp2[0] != '0'
 		&& tmp2.find_first_not_of("0123456789.") != std::string::npos)
-		{
-			std::cerr << "Error: invaled value";
-			if (delim == "|")
-				std::cerr << " in input file";
-			else
-				std::cerr << " in database file";
-			std::cerr << std::endl;
-			exit(EXIT_FAILURE) ;
-		}
-		if (data != NULL)
+			data->push_back(std::pair<std::string, float>("empty", 0));
+		else if (data != NULL)
 			data->push_back(std::pair<std::string, float>("empty", value));
 		else
 			database->insert(std::pair<std::string, float>("empty", value));
@@ -107,16 +99,8 @@ static void	btc_prs_input_line(std::string line,
 		value = std::atof(tmp2.c_str());
 		if (value == 0.0 && tmp2[0] != '0'
 		&& tmp2.find_first_not_of("0123456789.") != std::string::npos)
-		{
-			std::cerr << "Error: invaled value";
-			if (delim == "|")
-				std::cerr << " in input file";
-			else
-				std::cerr << " in database file";
-			std::cerr << std::endl;
-			exit(EXIT_FAILURE) ;
-		}
-		if (data != NULL)
+			data->push_back(std::pair<std::string, float>(tmp1, 0));
+		else if (data != NULL)
 			data->push_back(std::pair<std::string, float>(tmp1, value));
 		else
 			database->insert(std::pair<std::string, float>(tmp1, value));
