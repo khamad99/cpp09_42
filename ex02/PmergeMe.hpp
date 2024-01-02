@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 21:34:54 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 14:59:57 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/02 22:55:21 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <iomanip>
 # include <string>
 # include <list>
-# include <deque>
+# include <set>
 # include <algorithm>
 # include <iterator>
 # include <sstream>
@@ -33,16 +33,16 @@ std::list
 3- keep the duplicates
 4- keep the order of insertion
 
-std::deque
-1- is double-ended queue (array of arrays) 
-2- random access iterator can access the data in both directions
-3- keep the duplicates
-4- keep the order of insertion
+std::multiset
+1- is binary search tree
+2- keep the duplicates
+3- keep the order of insertion
 
-the list is slower than deque because 
-1- the list is linked list and the deque is array of arrays
-2- the list is bidirectional iterator and the deque is random access iterator
-3- the list is slower than deque in insertion and deletion
+
+the list is faster than multiset in insertion and deletion 
+1- list is O(1) for insertion and deletion because it is linked list
+2- multiset is O(log(n)) for insertion and deletion because it is binary search tree
+
 */
 
 class pmergeMe
@@ -50,7 +50,7 @@ class pmergeMe
 	private:
 		std::list<int>		_input;
 		std::list<int>		_l;
-		std::deque<int>		_s;
+		std::multiset<int>	_s;
 		double				_timeList;
 		double				_timeSet;
 		pmergeMe();

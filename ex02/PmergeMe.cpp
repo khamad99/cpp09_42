@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 21:42:48 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 09:05:09 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/02 22:55:30 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,65 +104,50 @@ static void margeSortList(std::list<int> & l)
 
 }
 
-static void mergeSet(std::deque<int> & lift, std::deque<int> & right, std::deque<int> & set)
+void mergeSet(std::multiset<int> & lift, std::multiset<int> & right, std::multiset<int> & set)
 {
-	int leftLen = lift.size();
-	int rightLen = right.size();
-	int l = 0;
-	int r = 0;
+    std::multiset<int>::iterator leftIt = lift.begin();
+    std::multiset<int>::iterator rightIt = right.begin();
 
-	while (l < leftLen && r < rightLen)
-	{
-		if (*lift.begin() < *right.begin())
-		{
-			set.push_back(*lift.begin());
-			lift.erase(lift.begin());
-			l++;
-		}
-		else
-		{
-			set.push_back(*right.begin());
-			right.erase(right.begin());
-			r++;
-		}
-	}
-	while (l < leftLen)
-	{
-		set.push_back(*lift.begin());
-		lift.erase(lift.begin());
-		l++;
-	}
-	while (r < rightLen)
-	{
-		set.push_back(*right.begin());
-		right.erase(right.begin());
-		r++;
-	}
+    while (leftIt != lift.end() && rightIt != right.end())
+    {
+        if (*leftIt < *rightIt)
+        {
+            set.insert(*leftIt);
+            leftIt++;
+        }
+        else
+        {
+            set.insert(*rightIt);
+            rightIt++;
+        }
+    }
+
+    while (leftIt != lift.end())
+    {
+        set.insert(*leftIt);
+        leftIt++;
+    }
+
+    while (rightIt != right.end())
+    {
+        set.insert(*rightIt);
+        rightIt++;
+    }
 }
 
-static void margeSortSet(std::deque<int> & s)
+void margeSortSet(std::multiset<int> & s)
 {
 	int len = s.size();
 	if (len <= 1)
-		return ;
+		return;
 	int mid = len / 2;
-	std::deque<int> left;
-	std::deque<int> right;
-	std::deque<int>::iterator it = s.begin();
-	for (int i = 0; i < mid; i++)
-	{
-		left.push_back(*it++);
-		s.pop_front();
-	}
-	for (int i = mid; i < len; i++)
-	{
-		right.push_back(*it++);
-		s.pop_front();
-	}
+	std::multiset<int> left(s.begin(), std::next(s.begin(), mid));
+	std::multiset<int> right(std::next(s.begin(), mid), s.end());
 	margeSortSet(left);
 	margeSortSet(right);
+	s.clear();
 	mergeSet(left, right, s);
-
 }
 
 void fillList(std::list<int> & input, std::list<int> & l)
@@ -175,14 +160,10 @@ void fillList(std::list<int> & input, std::list<int> & l)
 	}
 }
 
-void fillDeque(std::list<int> & input, std::deque<int> & s)
+void fillMultiset(std::list<int> & input, std::multiset<int> & s)
 {
-	std::list<int>::iterator it = input.begin();
-	for (size_t i = 0; i < input.size(); i++)
-	{
-		s.push_back(*it);
-		it++;
-	}
+	for (std::list<int>::iterator it = input.begin(); it != input.end(); it++)
+		s.insert(*it);
 }
 
 void		pmergeMe::margeSort()
@@ -194,7 +175,7 @@ void		pmergeMe::margeSort()
 	this->_timeList = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 	
 	start = clock();
-	fillDeque(this->_input, this->_s);
+	fillMultiset(this->_input, this->_s);
 	margeSortSet(this->_s);
 	end = clock();
 	this->_timeSet = static_cast<double>(end - start) / CLOCKS_PER_SEC;
@@ -210,8 +191,8 @@ void		pmergeMe::print()
 			std::cout << " ";
 	}
 	std::cout << std::endl;
-	std::cout << "After: ";
-	std::deque<int>::iterator it = this->_s.begin();
+	std::cout << "After:  ";
+	std::multiset<int>::iterator it = this->_s.begin();
 	for (size_t i = 0; i < this->_s.size(); i++)
 	{
 		std::cout << *it;
@@ -220,20 +201,11 @@ void		pmergeMe::print()
 		it++;
 	}
 	std::cout << std::endl;
-	std::list<int>::iterator it2 = this->_l.begin();
-	for (size_t i = 0; i < this->_l.size(); i++)
-	{
-		std::cout << *it2;
-		if (i < this->_l.size() - 1)
-			std::cout << " ";
-		it2++;
-	}
-	std::cout << std::endl;
 	std::cout << "Time to process a range of " << this->_l.size()
-	<< " elements with std::list : " << std::fixed << std::setprecision(6)
+	<< " elements with std::list :     " << std::fixed << std::setprecision(6)
 	<< this->_timeList << " us" << std::endl;
 
 	std::cout << "Time to process a range of " << this->_s.size()
-	<< " elements with std::deque : " << std::fixed << std::setprecision(6)
+	<< " elements with std::multiset : " << std::fixed << std::setprecision(6)
 	<< this->_timeSet << " us" << std::endl;
 }
