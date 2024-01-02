@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 22:25:40 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 09:09:47 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/02 14:46:28 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ int main(int ac, char **av)
 	while (i < ac)
 	{
 		input = av[i];
-		if (input.find_first_not_of("0123456789") != std::string::npos)
+		if (input.find_first_not_of("0123456789+") != std::string::npos)
 		{
 			std::cout << "Error: invalid input" << std::endl;
 			return (0);
 		}
 		ss << input;
 		ss >> n;
-		if (ss.fail() || n < 0)
+		if (ss.fail() || n < 0 || n > std::numeric_limits<int>::max())
 		{
 			std::cout << "Error: invalid input" << std::endl;
 			return (0);

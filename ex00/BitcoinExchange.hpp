@@ -6,9 +6,23 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:31:31 by kalshaer          #+#    #+#             */
-/*   Updated: 2023/12/29 09:47:50 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/02 14:02:18 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/*
+std::vector to store the data from the file because 
+1- I need to keep the order of the data as it is in the file
+2- It accepts duplicates
+3- It accpts pairs
+4- it can be resized at runtime
+
+std::map to store the data from the file because 
+1- I need to be able to access the data by date 
+2- it have a find() method 
+3- it is sorted by key
+4- it does not accept duplicates
+*/
 
 #ifndef BITCOINEXCHANGE_HPP
 # define BITCOINEXCHANGE_HPP

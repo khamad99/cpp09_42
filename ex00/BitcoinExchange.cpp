@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:32:06 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 10:52:18 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/02 13:45:43 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,33 +57,6 @@ static bool btc_check_date_format(std::string date)
 		|| date == "2009-01-01")
 			return (std::cout << "Error: bad input => " << date << std::endl, false);
 		return (true);
-
-
-
-
-	// if (date.size() != 10
-	// || date[4] != '-'
-	// || date[7] != '-'
-	// || date.find_first_not_of("0123456789-") != std::string::npos
-	// || std::atoi((date.substr(0, 4)).c_str()) < 2009
-	// || std::atoi((date.substr(0, 4)).c_str()) > 2023
-	// || date == "2009-01-01"
-	// || std::atoi((date.substr(5, 2)).c_str()) < 1
-	// || std::atoi((date.substr(5, 2)).c_str()) > 12
-	// || std::atoi((date.substr(8, 2)).c_str()) < 1
-	// || (std::atoi((date.substr(8, 2)).c_str()) > 31
-	// && (std::atoi((date.substr(5, 2)).c_str()) == 1 || std::atoi((date.substr(5, 2)).c_str()) == 3
-	// || std::atoi((date.substr(5, 2)).c_str()) == 5 || std::atoi((date.substr(5, 2)).c_str()) == 7
-	// || std::atoi((date.substr(5, 2)).c_str()) == 8 || std::atoi((date.substr(5, 2)).c_str()) == 10
-	// || std::atoi((date.substr(5, 2)).c_str()) == 12))
-	// || (std::atoi((date.substr(8, 2)).c_str()) > 30
-	// && (std::atoi((date.substr(5, 2)).c_str()) == 4 || std::atoi((date.substr(5, 2)).c_str()) == 6
-	// || std::atoi((date.substr(5, 2)).c_str()) == 9 || std::atoi((date.substr(5, 2)).c_str()) == 11))
-	// || (std::atoi((date.substr(8, 2)).c_str()) > 28
-	// && std::atoi((date.substr(5, 2)).c_str()) == 2))
-	// 	return (std::cout << "Error: bad input => " << date << std::endl, false);
-	// return (true);
-	
 }
 
 static	float btc_find_date_in_database(std::string date,

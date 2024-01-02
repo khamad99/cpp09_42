@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 07:19:24 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 12:16:58 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/02 14:25:43 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 # include <string>
 # include <stack>
 # include <cmath>
+
+/*
+std::stack to store the data from the file because
+1- I need to use the LIFO principle
+*/
 
 class RPN
 {

@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 13:39:27 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 10:13:06 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/02 14:16:25 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,16 @@ static	void	btc_prs_input_file(std::string str,
 
 	if (ifs.is_open())
 	{
+		if (ifs.peek() == std::ifstream::traits_type::eof())
+		{
+			std::cerr << "Error: empty";
+			if (delim == "|")
+				std::cerr << " input file";
+			else
+				std::cerr << " database file";
+			std::cerr << std::endl;
+			exit(EXIT_FAILURE) ;
+		}
 		std::getline(ifs, line);
 		if (!btc_prs_input_head(line, delim))
 		{

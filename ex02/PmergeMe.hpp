@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 21:34:54 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 09:03:05 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/02 14:59:57 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <iomanip>
 # include <string>
 # include <list>
-# include <set>
+# include <deque>
 # include <algorithm>
 # include <iterator>
 # include <sstream>
@@ -25,8 +25,25 @@
 # include <cmath>
 # include <ctime>
 # include <cstdlib>
-# include <deque>
 
+/*
+std::list 
+1- is linked list 
+2- bidirectional iterator can access the data in both directions
+3- keep the duplicates
+4- keep the order of insertion
+
+std::deque
+1- is double-ended queue (array of arrays) 
+2- random access iterator can access the data in both directions
+3- keep the duplicates
+4- keep the order of insertion
+
+the list is slower than deque because 
+1- the list is linked list and the deque is array of arrays
+2- the list is bidirectional iterator and the deque is random access iterator
+3- the list is slower than deque in insertion and deletion
+*/
 
 class pmergeMe
 {
