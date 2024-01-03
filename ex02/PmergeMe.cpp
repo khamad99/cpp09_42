@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 21:42:48 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/03 13:28:08 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/03 15:04:05 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,46 +46,65 @@ pmergeMe & pmergeMe::operator=(const pmergeMe & rhs)
 
 
 
-static void insertSortedList(std::list<int> & largElms, int element)
+static void mergeList(std::list<int> & lift, std::list<int> & right, std::list<int> & list)
 {
-	 std::list<int>::iterator it = std::lower_bound(largElms.begin(), largElms.end(), element);
-	 largElms.insert(it, element);
-}
+	int leftLen = lift.size();
+	int rightLen = right.size();
+	int l = 0;
+	int r = 0;
 
-statc void	mergeSet(std::list<int> &largElms, std::list<int> &smallElms, std::list<int> & l)
-{
-	
+	while (l < leftLen && r < rightLen)
+	{
+		if (lift.front() < right.front())
+		{
+			list.push_back(lift.front());
+			lift.pop_front();
+			l++;
+		}
+		else
+		{
+			list.push_back(right.front());
+			right.pop_front();
+			r++;
+		}
+	}
+	while (l < leftLen)
+	{
+		list.push_back(lift.front());
+		lift.pop_front();
+		l++;
+	}
+	while (r < rightLen)
+	{
+		list.push_back(right.front());
+		right.pop_front();
+		r++;
+	}
 }
 
 static void margeSortList(std::list<int> & l)
 {
-	if ( l.size() <= 1)
+	int len = l.size();
+	if (len <= 1)
 		return ;
-
-	std::list<int> largElms;
-	std::list<int> smallElms;
-
+	int mid = len / 2;
+	std::list<int> left;
+	std::list<int> right;
 	std::list<int>::iterator it = l.begin();
-	while (it != l.end())
+	for (int i = 0; i < mid; i++)
 	{
-		largElms.push_back(std::max(*it, *(++it));
-		smallElms.push_back(std::min(*it, *(++it));
-		l.pop_front();
+		left.push_back(*it++);
 		l.pop_front();
 	}
-	margeSortList(largElms);
-	margeSortList(smallElms);
+	for (int i = mid; i < len; i++)
+	{
+		right.push_back(*it++);
+		l.pop_front();
+	}
+	margeSortList(left);
+	margeSortList(right);
+	mergeList(left, right, l);
 
-	it = l.begin();
-	while (it != l.end())
-	{
-		insertSortedList(largElms, *it);
-		++it;
-		if (it != l.end())
-			++it;
-	}
-	l.clear();
-	l = std::move(largElms);
 }
 
 void mergeSet(std::multiset<int> & lift, std::multiset<int> & right, std::multiset<int> & set)
@@ -150,10 +169,43 @@ void fillMultiset(std::list<int> & input, std::multiset<int> & s)
 		s.insert(*it);
 }
 
+static void	margeSortListLarge(std::list<int> & l, std::list<int> & large, std::list<int> & small)
+{
+	int pair = std::numeric_limits<int>::max();
+	std::list<int>::iterator it = l.begin();
+	while (next(it) != l.end())
+	{
+		int first = *it;
+		int second = *next(it);
+		if (first > second)
+		{
+			if (pair < first)
+				pair = second;
+			large.push_back(first);
+			small.push_back(second);
+		}
+		else
+		{
+			large.push_back(second);
+			small.push_back(first);
+		}
+		l.pop_front();
+		l.pop_front();
+	}
+	if (l.size() == 1)
+	{
+		small.push_back(l.front());
+		l.pop_front();
+	}
+}
+
 void		pmergeMe::margeSort()
 {
 	clock_t start = clock();
+	std::list<int> large;
+	std::list<int> small;
 	fillList(this->_input, this->_l);
+	margeSortListLarge(this->_l, large, small);
 	margeSortList(this->_l);
 	clock_t end = clock();
 	this->_timeList = static_cast<double>(end - start) / CLOCKS_PER_SEC;
