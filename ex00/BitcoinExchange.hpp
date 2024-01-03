@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:31:31 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 14:02:18 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/03 08:03:50 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ std::map to store the data from the file because
 # include <vector>
 # include <map>
 # include <algorithm>
+# include <filesystem>
 
 # define SPC ' '
 # define TAB '\t'

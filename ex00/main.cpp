@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 13:39:27 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 14:16:25 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/03 08:17:18 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,15 @@ static	void	btc_prs_input_file(std::string str,
 	std::map<std::string, float> *database,
 	std::string delim)
 {
-	std::ifstream	ifs(str.c_str());
 	std::string		line;
+	std::filesystem::path p(str);
 
+	if (std::filesystem::is_directory(p))
+	{
+		std::cerr << "Error: " << str << " is a directory" << std::endl;
+		exit(EXIT_FAILURE) ;
+	}
+	std::ifstream	ifs(str.c_str());
 	if (ifs.is_open())
 	{
 		if (ifs.peek() == std::ifstream::traits_type::eof())
@@ -145,18 +151,18 @@ static	void	btc_prs_input_file(std::string str,
 			else
 				std::cerr << " database file";
 			std::cerr << std::endl;
+			ifs.close();
 			exit(EXIT_FAILURE) ;
 		}
 		std::getline(ifs, line);
 		if (!btc_prs_input_head(line, delim))
 		{
-			std::cerr << "Error: invaled header"; 
+			std::cout << "Error: invaled header"; 
 			if (delim == "|")
-				std::cerr << " in input file";
+				std::cout << " in input file";
 			else
-				std::cerr << " in database file";
-			std::cerr << std::endl;
-			exit(EXIT_FAILURE) ;
+				std::cout << " in database file";
+			std::cout << std::endl;
 		}
 		while (std::getline(ifs, line))
 			btc_prs_input_line(strtrim_space(line), data, database, delim);
