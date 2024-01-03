@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 21:42:48 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/03 15:04:05 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/03 22:02:40 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,34 +109,34 @@ static void margeSortList(std::list<int> & l)
 
 void mergeSet(std::multiset<int> & lift, std::multiset<int> & right, std::multiset<int> & set)
 {
-    std::multiset<int>::iterator leftIt = lift.begin();
-    std::multiset<int>::iterator rightIt = right.begin();
+	std::multiset<int>::iterator leftIt = lift.begin();
+	std::multiset<int>::iterator rightIt = right.begin();
 
-    while (leftIt != lift.end() && rightIt != right.end())
-    {
-        if (*leftIt < *rightIt)
-        {
-            set.insert(*leftIt);
-            leftIt++;
-        }
-        else
-        {
-            set.insert(*rightIt);
-            rightIt++;
-        }
-    }
+	while (leftIt != lift.end() && rightIt != right.end())
+	{
+		if (*leftIt < *rightIt)
+		{
+			set.insert(*leftIt);
+			leftIt++;
+		}
+		else
+		{
+			set.insert(*rightIt);
+			rightIt++;
+		}
+	}
 
-    while (leftIt != lift.end())
-    {
-        set.insert(*leftIt);
-        leftIt++;
-    }
+	while (leftIt != lift.end())
+	{
+		set.insert(*leftIt);
+		leftIt++;
+	}
 
-    while (rightIt != right.end())
-    {
-        set.insert(*rightIt);
-        rightIt++;
-    }
+	while (rightIt != right.end())
+	{
+		set.insert(*rightIt);
+		rightIt++;
+	}
 }
 
 void margeSortSet(std::multiset<int> & s)
@@ -169,9 +169,11 @@ void fillMultiset(std::list<int> & input, std::multiset<int> & s)
 		s.insert(*it);
 }
 
-static void	margeSortListLarge(std::list<int> & l, std::list<int> & large, std::list<int> & small)
+static void	margeSortLiStart(std::list<int> & l,
+	std::list<int> & large,
+	std::list<int> & small,
+	int & pair)
 {
-	int pair = std::numeric_limits<int>::max();
 	std::list<int>::iterator it = l.begin();
 	while (next(it) != l.end())
 	{
@@ -179,8 +181,6 @@ static void	margeSortListLarge(std::list<int> & l, std::list<int> & large, std::
 		int second = *next(it);
 		if (first > second)
 		{
-			if (pair < first)
-				pair = second;
 			large.push_back(first);
 			small.push_back(second);
 		}
@@ -189,30 +189,143 @@ static void	margeSortListLarge(std::list<int> & l, std::list<int> & large, std::
 			large.push_back(second);
 			small.push_back(first);
 		}
+		if ((first > second && second < pair))
+			pair = second;
+		else if ((first < second && first < pair))
+			pair = first;
 		l.pop_front();
 		l.pop_front();
+		it = l.begin();
 	}
 	if (l.size() == 1)
 	{
-		small.push_back(l.front());
+		large.push_back(l.front());
 		l.pop_front();
 	}
 }
 
+static void	margeSortListBinary(std::list<int> & small,
+	std::list<int> & large,
+	std::list<int> & l)
+{
+	std::list<int>::iterator it = small.begin();
+	std::list<int>::iterator it2;
+	
+	int pair = large.front();
+	while (it != small.end())
+	{
+		if (pair == *it)
+			it = std::next(it);
+		if (it == small.end())
+			break;
+		it2 = std::lower_bound(large.begin(), large.end(), *it);
+		large.insert(it2, *it);
+		it = std::next(it);
+	}
+	l.clear();
+	l = large;
+}
+
+static void mergeSortMultiSetBinary(std::multiset<int>& small,
+	std::multiset<int>& large,
+	std::multiset<int>& l)
+{
+	std::multiset<int>::iterator it = small.begin();
+	int pair = *large.begin();
+	while (it != small.end()) {
+		if (pair == *it)
+			it = std::next(it);
+		if (it == small.end())
+			break;
+		std::multiset<int>::iterator it2 = large.lower_bound(*it);
+		large.insert(it2, *it);
+		it = std::next(it);
+	}
+	l.clear();
+	l = large;
+}
+
+static void mergeSortMultiSetStart(std::multiset<int>& l,
+	std::multiset<int>& large,
+	std::multiset<int>& small,
+	int& pair)
+{
+	std::multiset<int>::iterator it = l.begin();
+	std::multiset<int>::iterator nextIt;
+	while (it != l.end())
+	{
+		int first = *it;
+		nextIt = std::next(it);
+		if (nextIt != l.end())
+		{
+			int second = *nextIt;
+			if (first > second)
+			{
+				large.insert(first);
+				small.insert(second);
+			}
+			else
+			{
+				large.insert(second);
+				small.insert(first);
+			}
+			if ((first > second && second < pair))
+				pair = second;
+			else if ((first < second && first < pair))
+				pair = first;
+			l.erase(it);
+			l.erase(nextIt);
+			it = l.begin();
+		}
+		else
+		{
+			large.insert(first);
+			l.erase(it);
+			break;
+		}
+	}
+	l.clear();
+	l = large;
+}
+
 void		pmergeMe::margeSort()
 {
+	int flag = 0;
 	clock_t start = clock();
 	std::list<int> large;
 	std::list<int> small;
+	int pair = std::numeric_limits<int>::max();
 	fillList(this->_input, this->_l);
-	margeSortListLarge(this->_l, large, small);
-	margeSortList(this->_l);
+	if (this->_l.size() <= 3)
+	{
+		flag = 1;
+		margeSortList(this->_l);
+	}
+	else if (flag == 0)
+	{
+		margeSortLiStart(this->_l, large, small, pair);
+		margeSortList(large);
+		large.push_front(pair);
+		margeSortListBinary(small, large, this->_l);
+	}
 	clock_t end = clock();
 	this->_timeList = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 	
+
 	start = clock();
+	std::multiset<int> smallset;
+	std::multiset<int> largeset;
+	pair = std::numeric_limits<int>::max();
 	fillMultiset(this->_input, this->_s);
-	margeSortSet(this->_s);
+	if (flag == 1)
+		margeSortSet(this->_s);
+	else
+	{
+		mergeSortMultiSetStart(this->_s, largeset, smallset, pair);
+		margeSortSet(largeset);
+		largeset.insert(pair);
+		mergeSortMultiSetBinary(smallset, largeset, this->_s);
+	}
 	end = clock();
 	this->_timeSet = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 }

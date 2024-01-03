@@ -6,11 +6,25 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 22:25:40 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/03 11:52:42 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/03 20:33:30 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
+
+static void	removeDuplicates(std::list<int> & list)
+{
+	std::unordered_set<int> uniqueSet;
+	std::list<int>::iterator it = list.begin();
+
+	while (it != list.end()) 
+	{
+		if (uniqueSet.insert(*it).second)
+			++it;
+		else
+			it = list.erase(it);
+	}
+}
 
 int main(int ac, char **av)
 {
@@ -44,6 +58,13 @@ int main(int ac, char **av)
 		ss.clear();
 		i++;
 	}
+	removeDuplicates(input_list);
+	if (input_list.size() <= 1)
+	{
+		std::cout << "not enough unique numbers to sort" << std::endl;
+		return (0);
+	}
+	std::cout << "input size: " << input_list.size() << std::endl;
 	pmergeMe p(input_list);
 	p.margeSort();
 	p.print();
