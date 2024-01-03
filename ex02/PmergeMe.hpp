@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 21:34:54 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 22:55:21 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/03 10:08:52 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,11 @@ class pmergeMe
 		std::multiset<int>	_s;
 		double				_timeList;
 		double				_timeSet;
+
 		pmergeMe();
+	public:
 		pmergeMe(const pmergeMe & src);
 		pmergeMe & operator=(const pmergeMe & rhs);
-	public:
 		~pmergeMe();
 		pmergeMe(std::list<int> & input_list);
 		void		margeSort();

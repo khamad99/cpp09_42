@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 21:42:48 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 22:55:30 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/03 13:28:08 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ pmergeMe::pmergeMe(const pmergeMe & src)
 	return ;
 }
 
-pmergeMe & pmergeMe::operator=(const pmergeMe & rhs)
+pmergeMe & pmergeMe::operator=(const pmergeMe & rhs) 
 {
 	if (this != &rhs)
 	{
+		this->_input = rhs._input;
 		this->_l = rhs._l;
 		this->_s = rhs._s;
 		this->_timeList = rhs._timeList;
@@ -43,65 +44,48 @@ pmergeMe & pmergeMe::operator=(const pmergeMe & rhs)
 	return (*this);
 }
 
-static void mergeList(std::list<int> & lift, std::list<int> & right, std::list<int> & list)
-{
-	int leftLen = lift.size();
-	int rightLen = right.size();
-	int l = 0;
-	int r = 0;
 
-	while (l < leftLen && r < rightLen)
-	{
-		if (lift.front() < right.front())
-		{
-			list.push_back(lift.front());
-			lift.pop_front();
-			l++;
-		}
-		else
-		{
-			list.push_back(right.front());
-			right.pop_front();
-			r++;
-		}
-	}
-	while (l < leftLen)
-	{
-		list.push_back(lift.front());
-		lift.pop_front();
-		l++;
-	}
-	while (r < rightLen)
-	{
-		list.push_back(right.front());
-		right.pop_front();
-		r++;
-	}
+
+static void insertSortedList(std::list<int> & largElms, int element)
+{
+	 std::list<int>::iterator it = std::lower_bound(largElms.begin(), largElms.end(), element);
+	 largElms.insert(it, element);
+}
+
+statc void	mergeSet(std::list<int> &largElms, std::list<int> &smallElms, std::list<int> & l)
+{
+	
 }
 
 static void margeSortList(std::list<int> & l)
 {
-	int len = l.size();
-	if (len <= 1)
+	if ( l.size() <= 1)
 		return ;
-	int mid = len / 2;
-	std::list<int> left;
-	std::list<int> right;
-	std::list<int>::iterator it = l.begin();
-	for (int i = 0; i < mid; i++)
-	{
-		left.push_back(*it++);
-		l.pop_front();
-	}
-	for (int i = mid; i < len; i++)
-	{
-		right.push_back(*it++);
-		l.pop_front();
-	}
-	margeSortList(left);
-	margeSortList(right);
-	mergeList(left, right, l);
 
+	std::list<int> largElms;
+	std::list<int> smallElms;
+
+	std::list<int>::iterator it = l.begin();
+	while (it != l.end())
+	{
+		largElms.push_back(std::max(*it, *(++it));
+		smallElms.push_back(std::min(*it, *(++it));
+		l.pop_front();
+		l.pop_front();
+	}
+	margeSortList(largElms);
+	margeSortList(smallElms);
+
+	it = l.begin();
+	while (it != l.end())
+	{
+		insertSortedList(largElms, *it);
+		++it;
+		if (it != l.end())
+			++it;
+	}
+	l.clear();
+	l = std::move(largElms);
 }
 
 void mergeSet(std::multiset<int> & lift, std::multiset<int> & right, std::multiset<int> & set)
@@ -201,6 +185,15 @@ void		pmergeMe::print()
 		it++;
 	}
 	std::cout << std::endl;
+	std::list<int>::iterator it2 = this->_l.begin();
+	for (size_t i = 0; i < this->_l.size(); i++)
+	{
+		std::cout << *it2;
+		if (i < this->_l.size() - 1)
+			std::cout << " ";
+		it2++;
+	}
+	std::cout << std::endl;
 	std::cout << "Time to process a range of " << this->_l.size()
 	<< " elements with std::list :     " << std::fixed << std::setprecision(6)
 	<< this->_timeList << " us" << std::endl;
@@ -208,4 +201,9 @@ void		pmergeMe::print()
 	std::cout << "Time to process a range of " << this->_s.size()
 	<< " elements with std::multiset : " << std::fixed << std::setprecision(6)
 	<< this->_timeSet << " us" << std::endl;
+
+	if (std::is_sorted(this->_l.begin(),this->_l.end()))
+		std::cout << "list sorted" << std::endl;
+	if (std::is_sorted(this->_s.begin(),this->_s.end()))
+		std::cout << "multiset sorted" << std::endl;
 }

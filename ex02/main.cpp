@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 22:25:40 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/02 14:46:28 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/03 11:52:42 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int main(int ac, char **av)
 {
-	if (ac == 1 )
+	if (ac <= 2 )
 	{
-		std::cout << "Usage: ./pmergeMe [list of numbers]" << std::endl;
+		std::cout << "Usage: ./pmergeMe [int] [int] ..." << std::endl;
 		return (0);
 	}
 	std::list<int>		input_list;
