@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 07:21:35 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/03 09:28:48 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/04 10:32:39 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,11 @@ static void rpn_calc(std::string str)
 		}
 		else
 		{
+			if (tmp[tmp.size() - 1] == '-' || tmp[tmp.size() - 1] == '+')
+			{
+				std::cout << "Error: invalid input" << std::endl;
+				return ;
+			}
 			ss << tmp;
 			ss >> nb;
 			if (ss.fail() || nb <= -10 || nb >= 10)

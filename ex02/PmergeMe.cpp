@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 21:42:48 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/03 22:02:40 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/04 10:05:34 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -350,15 +350,6 @@ void		pmergeMe::print()
 		it++;
 	}
 	std::cout << std::endl;
-	std::list<int>::iterator it2 = this->_l.begin();
-	for (size_t i = 0; i < this->_l.size(); i++)
-	{
-		std::cout << *it2;
-		if (i < this->_l.size() - 1)
-			std::cout << " ";
-		it2++;
-	}
-	std::cout << std::endl;
 	std::cout << "Time to process a range of " << this->_l.size()
 	<< " elements with std::list :     " << std::fixed << std::setprecision(6)
 	<< this->_timeList << " us" << std::endl;
@@ -367,8 +358,8 @@ void		pmergeMe::print()
 	<< " elements with std::multiset : " << std::fixed << std::setprecision(6)
 	<< this->_timeSet << " us" << std::endl;
 
-	if (std::is_sorted(this->_l.begin(),this->_l.end()))
-		std::cout << "list sorted" << std::endl;
-	if (std::is_sorted(this->_s.begin(),this->_s.end()))
-		std::cout << "multiset sorted" << std::endl;
+	// if (std::is_sorted(this->_l.begin(),this->_l.end()))
+	// 	std::cout << "list sorted" << std::endl;
+	// if (std::is_sorted(this->_s.begin(),this->_s.end()))
+	// 	std::cout << "multiset sorted" << std::endl;
 }

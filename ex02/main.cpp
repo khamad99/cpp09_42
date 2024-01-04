@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 22:25:40 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/03 20:33:30 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/04 10:02:08 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int main(int ac, char **av)
 		std::cout << "not enough unique numbers to sort" << std::endl;
 		return (0);
 	}
-	std::cout << "input size: " << input_list.size() << std::endl;
 	pmergeMe p(input_list);
 	p.margeSort();
 	p.print();

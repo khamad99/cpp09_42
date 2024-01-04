@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 13:39:27 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/03 08:17:18 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/04 10:16:13 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,15 +127,21 @@ static bool	btc_prs_input_head(std::string line, std::string delim)
 		return (false);
 }
 
+bool isDirectory(const std::string& path) {
+	struct stat pathStat;
+	if (stat(path.c_str(), &pathStat) != 0) 
+		return false;
+    return S_ISDIR(pathStat.st_mode);
+}
+
 static	void	btc_prs_input_file(std::string str, 
 	std::vector<std::pair<std::string, float> > *data,
 	std::map<std::string, float> *database,
 	std::string delim)
 {
 	std::string		line;
-	std::filesystem::path p(str);
 
-	if (std::filesystem::is_directory(p))
+	if (isDirectory(str.c_str()))
 	{
 		std::cerr << "Error: " << str << " is a directory" << std::endl;
 		exit(EXIT_FAILURE) ;
