@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:32:06 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/03 09:18:59 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/05 10:07:48 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,22 +43,6 @@ static bool btc_check_value_format(float value)
 	
 }
 
-static bool btc_check_date_format(std::string date)
-{
-		std::tm time = {};
-		std::istringstream ss(date);
-		ss >> std::get_time(&time, "%Y-%m-%d");
-		if (ss.fail())
-			return (std::cout << "Error: bad input => " << date << std::endl, false);
-		std::time_t time_t = std::mktime(&time);
-		if (time_t == -1 
-		|| std::atoi((date.substr(0, 4)).c_str()) < 2009
-		|| std::atoi((date.substr(0, 4)).c_str()) > 2023
-		|| date == "2009-01-01")
-			return (std::cout << "Error: bad input => " << date << std::endl, false);
-		return (true);
-}
-
 static	float btc_find_date_in_database(std::string date,
 	std::map<std::string, float> &database)
 {
@@ -93,20 +77,71 @@ static	float btc_find_date_in_database(std::string date,
 	return (closest->second);
 }
 
-void	BitcoinExchange::exchange(std::vector<std::pair<std::string, float> > &data,
-	std::map<std::string, float> &database)
+bool BitcoinExchange::check_date_format(std::string date, int flag)
 {
-	float									value;
-
-	std::vector<std::pair<std::string, float> >::iterator it_data = data.begin();
-
-	for (it_data = data.begin(); it_data != data.end(); it_data++)
+	if (date.size() != 10
+	|| date[4] != '-'
+	|| date[7] != '-'
+	|| date.find_first_not_of("0123456789-") != std::string::npos)
 	{
-		if (btc_check_date_format(it_data->first) == false
-			|| btc_check_value_format(it_data->second) == false)
-			continue ;
-		value = btc_find_date_in_database(it_data->first, database);
-		std::cout << it_data->first << " => " << it_data->second << " = " << (value * it_data->second) << std::endl;
+		if (flag == 0)
+			return (std::cout << "Error: bad input => " << date << std::endl, false);
+		else
+			return (std::cout << "Error: invalid input in database file" << std::endl, false);
 	}
 
+	int day = std::atoi((date.substr(8, 2)).c_str());
+	int month = std::atoi((date.substr(5, 2)).c_str());
+	int year = std::atoi((date.substr(0, 4)).c_str());
+	int is_leap_year = (year % 4 == 0 || (year % 100 == 0 && year % 400 == 0));
+	if (date == "2009-01-01"
+		|| year < 2009 || year > 2023
+		|| month < 1 || month > 12
+		|| day < 1
+		|| (day > 31
+		&& (month == 1 || month == 3 || month == 5 || month == 7
+		|| month == 8 || month == 10 || month == 12))
+		|| (day > 30
+		&& (month == 4 || month == 6 || month == 9 || month == 11))
+		|| (day > 29 && month == 2 && is_leap_year)
+		|| (day > 28 && month == 2 && !is_leap_year))
+	{
+		if (flag == 0)
+			return (std::cout << "Error: bad input => " << date << std::endl, false);
+		else
+			return (std::cout << "Error: invalid input in database file" << std::endl, false);
+	}
+
+
+	return (true);
+}
+
+void	BitcoinExchange::exchange(std::string date,
+	float value,
+	std::map<std::string, float> &database,
+	int flag)
+{
+	float	price;
+
+	if (flag == 0)
+	{
+		if (check_date_format(date, 0) == false)
+			return ;
+		std::cout << "Error: no delimiter" << std::endl;
+			return;
+	}
+
+	if (flag == 1)
+	{
+		if (check_date_format(date, 0) == false)
+			return ;
+		std::cout << "Error: no value" << std::endl;
+			return ;
+	}
+
+	if (check_date_format(date, 0) == false
+		|| btc_check_value_format(value) == false)
+		return ;
+	price = btc_find_date_in_database(date, database);
+	std::cout << date << " => " << value << " = " << (value * price) << std::endl;
 }

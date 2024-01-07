@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 13:39:27 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/04 10:16:13 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/07 07:38:01 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ std::string strtrim_space(std::string str)
 }
 
 static void	btc_prs_input_line(std::string line,
-	std::vector<std::pair<std::string, float> > *data,
 	std::map<std::string, float> *database,
 	std::string delim)
 {
@@ -46,64 +45,102 @@ static void	btc_prs_input_line(std::string line,
 	std::string				tmp2;
 	float					value;
 	std::string				date;
+	int						flag = 0;
 
 	pos = line.find(delim);
 	if (pos == std::string::npos && line.size() == 0)
 	{
-		if (data != NULL)
-			data->push_back(std::pair<std::string, float>("empty", 0));
+		if (delim == "|")
+		{
+			std::cout << "Error: empty line" << std::endl;
+			return	;
+		}
 		else
-			database->insert(std::pair<std::string, float>("empty", 0));
-		return	;
+			flag = 1;
 	}
 	else if (pos == std::string::npos && line.size() != 0)
 	{
-		if (data != NULL)
-			data->push_back(std::pair<std::string, float>(line, 0));
+		if (delim == "|")
+		{
+			BitcoinExchange::exchange(line, 0, *database, 0);
+			return	;
+		}
 		else
-			database->insert(std::pair<std::string, float>(line, 0));	
-		return	;
+			flag = 1;	
+	}
+	if (flag == 1)
+	{
+		std::cerr << "Error: invalid input in database file" << std::endl;
+		exit(EXIT_FAILURE) ;
 	}
 	tmp1 = strtrim_space(line.substr(0, pos));
 	tmp2 = strtrim_space((line.substr(pos + 1, line.size())).c_str());
 	if (tmp1.size() == 0 && tmp2.size() == 0)
 	{
-		if (data != NULL)
-			data->push_back(std::pair<std::string, float>("empty", 0));
+		if (delim == "|")
+		{
+			std::cout << "Error: no date and value" << std::endl;
+			return ;
+		}
 		else
-			database->insert(std::pair<std::string, float>("empty", 0));
-		return	;
+			flag = 1;
 	}
 	else if (tmp1.size() == 0 && tmp2.size() != 0)
 	{
-		value = std::atof(tmp2.c_str());
-		if (value == 0.0 && tmp2[0] != '0'
-		&& tmp2.find_first_not_of("0123456789.") != std::string::npos)
-			data->push_back(std::pair<std::string, float>("empty", 0));
-		else if (data != NULL)
-			data->push_back(std::pair<std::string, float>("empty", value));
+		if (delim == "|")
+		{
+			std::cout << "Error: no date" << std::endl;
+			return ;
+		}
 		else
-			database->insert(std::pair<std::string, float>("empty", value));
-		return	;
+			flag = 1;
 	}
 	else if (tmp1.size() != 0 && tmp2.size() == 0)
 	{
-		if (data != NULL)
-			data->push_back(std::pair<std::string, float>(tmp1, 0));
+		if (delim == "|")
+		{
+			BitcoinExchange::exchange(tmp1, 0, *database, 1);
+			return ;
+		}
 		else
-			database->insert(std::pair<std::string, float>(tmp1, 0));
-		return	;
+			flag = 1;
 	}
 	else
 	{
 		value = std::atof(tmp2.c_str());
 		if (value == 0.0 && tmp2[0] != '0'
 		&& tmp2.find_first_not_of("0123456789.") != std::string::npos)
-			data->push_back(std::pair<std::string, float>(tmp1, 0));
-		else if (data != NULL)
-			data->push_back(std::pair<std::string, float>(tmp1, value));
+		{
+			if (delim == "|")
+			{
+				if (BitcoinExchange::check_date_format(tmp1, 0) == false)
+					return ;
+				std::cout << "Error: bad value" << " => " << tmp2 << std::endl;
+				return ;
+			}
+			else
+				flag = 1;
+		}
+		else if (delim == "|")
+			BitcoinExchange::exchange(tmp1, value, *database, 2);
 		else
+		{
+			if (BitcoinExchange::check_date_format(tmp1, 1) == false)
+				exit(EXIT_FAILURE) ;
+			std::cout << value << std::endl;
+			if (value < 0.0 || value > std::numeric_limits<int>::max())
+			{
+				
+				std::cerr << "Error: invalid input in database file" << std::endl;
+				exit(EXIT_FAILURE) ;
+			}
 			database->insert(std::pair<std::string, float>(tmp1, value));
+		}
+	}
+	if (flag == 1)
+	{
+		std::cerr << "Error: invalid input in database file" << std::endl;
+		exit(EXIT_FAILURE) ;
 	}
 }
 
@@ -131,11 +168,10 @@ bool isDirectory(const std::string& path) {
 	struct stat pathStat;
 	if (stat(path.c_str(), &pathStat) != 0) 
 		return false;
-    return S_ISDIR(pathStat.st_mode);
+	return S_ISDIR(pathStat.st_mode);
 }
 
-static	void	btc_prs_input_file(std::string str, 
-	std::vector<std::pair<std::string, float> > *data,
+static	void	btc_prs_input_file(std::string str,
 	std::map<std::string, float> *database,
 	std::string delim)
 {
@@ -160,18 +196,24 @@ static	void	btc_prs_input_file(std::string str,
 			ifs.close();
 			exit(EXIT_FAILURE) ;
 		}
-		std::getline(ifs, line);
+
+		while (std::getline(ifs, line) && (line.size() == 0 || line.find_first_not_of(" \t\v\f\r") == std::string::npos))
+			line.clear();
 		if (!btc_prs_input_head(line, delim))
 		{
-			std::cout << "Error: invaled header"; 
 			if (delim == "|")
-				std::cout << " in input file";
+				std::cout << "Error: invaled header in input file" << std::endl;
 			else
-				std::cout << " in database file";
-			std::cout << std::endl;
+			{
+				std::cout << "Error: invaled header in database file"  << std::endl;
+				exit(EXIT_FAILURE) ;
+			}
 		}
 		while (std::getline(ifs, line))
-			btc_prs_input_line(strtrim_space(line), data, database, delim);
+		{
+			btc_prs_input_line(strtrim_space(line), database, delim);
+			line.clear();
+		}
 		ifs.close();
 	}
 	else
@@ -189,24 +231,19 @@ static	void	btc_prs_input_file(std::string str,
 
 int main(int ac, char **av)
 {
-	std::vector<std::pair<std::string, float> > data;
+
 	std::map<std::string, float> database;
 
 	if (ac != 2)
 		return (std::cout << "Usage: ./btc [file]" << std::endl, 1);
 
-	btc_prs_input_file(av[1], &data, NULL, "|");
-	if (data.size() == 0)
-	{
-		std::cerr << "Error: empty input file" << std::endl;
-		exit(EXIT_FAILURE) ;
-	}
-	btc_prs_input_file("data.csv", NULL, &database, ",");
+	btc_prs_input_file("data.csv", &database, ",");
 	if (database.size() == 0)
 	{
 		std::cerr << "Error: empty database file" << std::endl;
 		exit(EXIT_FAILURE) ;
 	}
-	BitcoinExchange::exchange(data, database);
+
+	btc_prs_input_file(av[1], &database, "|");
 	return (0);
 }

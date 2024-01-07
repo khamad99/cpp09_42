@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:31:31 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/04 10:15:13 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/05 10:02:44 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ class BitcoinExchange
 		BitcoinExchange & operator=(BitcoinExchange const & src);
 	public:
 
-		static void		exchange(std::vector<std::pair<std::string, float> > &data,
-			std::map<std::string, float> &database);
+		static void		exchange(std::string date, float value, std::map<std::string, float> &database, int flag);
+		static bool		check_date_format(std::string date, int flag);
 };
 
 #endif
