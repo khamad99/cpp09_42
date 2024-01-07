@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 07:21:35 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/04 10:32:39 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/07 15:16:32 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ static bool rpn_check_format(std::string str)
 		return (std::cout << "Error: empty string." << std::endl, false);
 	else if (str.find_first_not_of("0123456789.+-*/% ") != std::string::npos)
 		return (std::cout << "Error: invalid character." << std::endl, false);
-	else if (str.find_first_of("0123456789") == std::string::npos)
+	else if (str.find_first_of("0123456789") == std::string::npos && str.size() >= 1)
 		return (std::cout << "Error: no numbers." << std::endl, false);
-	else if (str.find_first_of("+-*/%") == std::string::npos)
+	else if (str.find_first_of("+-*/%") == std::string::npos && str.size() > 1)
 		return (std::cout << "Error: no operators." << std::endl, false);
 	return (true);
 }
@@ -55,7 +55,6 @@ static void rpn_calc(std::string str)
 	float				b;
 	float				c;
 	int					nb;
-	int					i = -1;
 
 	while (str.size() > 0)
 	{
@@ -113,7 +112,6 @@ static void rpn_calc(std::string str)
 				return ;
 			}
 			stack.push(static_cast<float>(nb));
-			++i;
 			ss.clear();
 		}
 		if (str.find_first_of(" ") == std::string::npos)
@@ -124,11 +122,6 @@ static void rpn_calc(std::string str)
 	if (stack.size() != 1)
 	{
 		std::cout << "Error: too many numbers." << std::endl;
-		return ;
-	}
-	if (i <= 0)
-	{
-		std::cout << "Error: no numbers." << std::endl;
 		return ;
 	}
 	std::cout << stack.top() << std::endl;

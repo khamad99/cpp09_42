@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:32:06 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/05 10:07:48 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/07 14:46:35 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static	float btc_find_date_in_database(std::string date,
 		ss2 >> std::get_time(&time2, "%Y-%m-%d");
 		std::time_t time1_t = std::mktime(&time1);
 		std::time_t time2_t = std::mktime(&time2);
-
+		
 		if (time1_t != -1 && time2_t != -1)
 		{
 			tmp = std::difftime(time1_t, time2_t);
@@ -107,9 +107,8 @@ bool BitcoinExchange::check_date_format(std::string date, int flag)
 		|| (day > 28 && month == 2 && !is_leap_year))
 	{
 		if (flag == 0)
-			return (std::cout << "Error: bad input => " << date << std::endl, false);
-		else
-			return (std::cout << "Error: invalid input in database file" << std::endl, false);
+			std::cout << "Error: bad input => " << date << std::endl;
+		return (false);
 	}
 
 
