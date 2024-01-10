@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 13:39:27 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/07 22:18:00 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:19:40 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ static int	btc_prs_input_line(std::string line,
 	std::string				date;
 	int						flag = 0;
 
-	if (delim == "|")
-	std::cout << line << std::endl;
 	pos = line.find(delim);
 	if (pos == std::string::npos && line.size() == 0)
 	{
@@ -106,13 +104,17 @@ static int	btc_prs_input_line(std::string line,
 	}
 	else
 	{
+		int f_flag = 0;
 		std::stringstream	ss(tmp2);
+		std::string::iterator sit = std::find(tmp2.begin(), tmp2.end(), '.');
+		if (sit != tmp2.end() && sit + 1 != tmp2.end() && !std::isdigit(*(sit + 1)))
+			f_flag = 1;
 		ss >> value;
 		int is_fail = ss.fail();
 		ss.get();
-		if (is_fail || ss.get() != -1 || tmp2.find_first_not_of("0123456789.+-f") != std::string::npos
+		if (f_flag || is_fail || ss.get() != -1 || tmp2.find_first_not_of("0123456789.+-f") != std::string::npos
 			|| std::count(tmp2.begin(), tmp2.end(), '.') > 1
-			|| tmp2.find_last_not_of("0123456789") == tmp2.size() - 1
+			|| tmp2.find_last_not_of("0123456789f") == tmp2.size() - 1
 			|| tmp2.find_first_not_of("0123456789") == 0)
 		{
 			if (delim == "|")

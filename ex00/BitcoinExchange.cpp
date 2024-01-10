@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 14:32:06 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/07 14:46:35 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:21:42 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ static	float btc_find_date_in_database(std::string date,
 			}
 		}
 	}
+	// std::cout << "closest date => " << closest->first << " = " << closest->second << "---------";
 	return (closest->second);
 }
 
