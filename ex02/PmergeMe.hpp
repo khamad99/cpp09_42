@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 21:34:54 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/04 10:01:16 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/10 14:06:53 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@
 # include <cmath>
 # include <ctime>
 # include <cstdlib>
+
+# define SPC ' '
+# define TAB '\t'
+# define LF '\n'
+# define VT '\v'
+# define FF '\f'
+# define CR '\r'
 
 /*
 std::list 
