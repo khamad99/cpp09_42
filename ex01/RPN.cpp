@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 07:21:35 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/07 15:16:32 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/13 11:31:38 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static bool rpn_check_format(std::string str)
 {
 	if (str.size() == 0)
 		return (std::cout << "Error: empty string." << std::endl, false);
-	else if (str.find_first_not_of("0123456789.+-*/% ") != std::string::npos)
+	else if (str.find_first_not_of("0123456789+-*/ ") != std::string::npos)
 		return (std::cout << "Error: invalid character." << std::endl, false);
 	else if (str.find_first_of("0123456789") == std::string::npos && str.size() >= 1)
 		return (std::cout << "Error: no numbers." << std::endl, false);
@@ -96,7 +96,7 @@ static void rpn_calc(std::string str)
 			}
 			ss << tmp;
 			ss >> nb;
-			if (ss.fail() || nb <= -10 || nb >= 10)
+			if (ss.fail() || nb <= -10 || nb >= 10 || ss.get() != -1)
 			{
 				ss.clear();
 				if (tmp.empty())
