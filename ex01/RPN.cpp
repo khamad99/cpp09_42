@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 07:21:35 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/13 11:31:38 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/13 18:32:34 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void rpn_calc(std::string str)
 	while (str.size() > 0)
 	{
 		tmp = str.substr(0, str.find_first_of(" "));
-		if (tmp.size() == 1 && tmp.find_first_of("+-*/%") != std::string::npos)
+		if (tmp.size() == 1 && tmp.find_first_of("+-*/") != std::string::npos)
 		{
 			if (stack.size() < 2)
 			{
