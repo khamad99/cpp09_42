@@ -6,7 +6,7 @@
 /*   By: kalshaer <kalshaer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 13:39:27 by kalshaer          #+#    #+#             */
-/*   Updated: 2024/01/10 13:19:40 by kalshaer         ###   ########.fr       */
+/*   Updated: 2024/01/13 11:19:17 by kalshaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ static int	btc_prs_input_line(std::string line,
 		if (f_flag || is_fail || ss.get() != -1 || tmp2.find_first_not_of("0123456789.+-f") != std::string::npos
 			|| std::count(tmp2.begin(), tmp2.end(), '.') > 1
 			|| tmp2.find_last_not_of("0123456789f") == tmp2.size() - 1
-			|| tmp2.find_first_not_of("0123456789") == 0)
+			|| tmp2.find_first_not_of("+0123456789") == 0)
 		{
 			if (delim == "|")
 			{
